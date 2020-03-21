@@ -150,6 +150,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     // On dessine les éléments sélectonnés dans activiteeLimitee
     func miseAJourDonneesGraphiques()  {
         // On recupere  les objets graphiques d'activiteeLimitee
+        print(selectedItems)
         if let act = activitee, selectedItems.count > 1 {
             let listeReduite: Activitee = Activitee(nom: act.nom, categories: [])
             
@@ -160,7 +161,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         enCouleur = addColorsForCategories(categories: valeurPerCent)
         applePie.valeurs = enCouleur
         applePie.selectedObjects = selectedItems
-        print("encouleur = \(enCouleur)")
+        //print("encouleur = \(enCouleur)")
         // On recalcule la table
         bilanTableView.reloadData()
         // On redessine le camembert
@@ -173,6 +174,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     func dessineCamembert()  {
         if let enCouleurs = enCouleur{
             applePie.valeurs = enCouleurs
+            applePie.selectedObjects = selectedItems
             //applePie.draw(applePie.frame)
             applePie.setNeedsDisplay()
         }
@@ -208,21 +210,26 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedItems.append(indexPath.row)
-        print("ligne selectionnée : (indexPath.row)")
+        if !selectedItems.contains(indexPath.row){
+            selectedItems.append(indexPath.row)
+            //print("ligne selectionnée : (indexPath.row)")
+            miseAJourDonneesGraphiques()
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-         let cible = indexPath.row
-               var posCible = -1
-               for index in 0..<selectedItems.count {
-                   if selectedItems[index] == cible {
-                       posCible = index
-                   }
-               }
-               if posCible > -1 {
-                   selectedItems.remove(at: posCible)
-               }
+        let cible = indexPath.row
+        var posCible = -1
+        for index in 0..<selectedItems.count {
+        if selectedItems[index] == cible {
+                posCible = index
+            }
+        }
+        if posCible > -1 {
+            selectedItems.remove(at: posCible)
+        }
+        miseAJourDonneesGraphiques()
     }
     
     

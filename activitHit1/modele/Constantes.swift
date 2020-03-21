@@ -33,8 +33,8 @@ let TOTAL = "total"
 let COULEURS:[UIColor] =  [.blue,.orange,.green, .red, .yellow, .magenta,  .brown, .cyan,.purple, .darkGray, .lightGray, .systemPink, .systemIndigo]
 // largeur des trait
 let LINE_THIN:CGFloat = 1
-let LINE_MEDIUM:CGFloat = 2
-let LINE_FAT:CGFloat = 4
+let LINE_MEDIUM:CGFloat = 4
+let LINE_FAT:CGFloat = 6
 
 
 // Terminal
