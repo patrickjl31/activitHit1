@@ -150,10 +150,16 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     // On dessine les éléments sélectonnés dans activiteeLimitee
     func miseAJourDonneesGraphiques()  {
         // On recupere  les objets graphiques d'activiteeLimitee
+        if let act = activitee, selectedItems.count > 1 {
+            let listeReduite: Activitee = Activitee(nom: act.nom, categories: [])
+            
+        }
+        // On recupere  les objets graphiques d'activiteeLimitee
         let valeursG = activiteeLimitee.grafGlobal()
         let valeurPerCent = activiteeLimitee.grafGlobalPerCent(globalRes: valeursG)
         enCouleur = addColorsForCategories(categories: valeurPerCent)
         applePie.valeurs = enCouleur
+        applePie.selectedObjects = selectedItems
         print("encouleur = \(enCouleur)")
         // On recalcule la table
         bilanTableView.reloadData()
@@ -192,7 +198,6 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
             
             let pourcent = Int(source.val)
             cell.texteLegende.text = "\(source.ident)  = \(source.nbHits) Hits : \(Int(pourcent))%"
-            //cell.texteLegende.text = "\(source.ident) : \(Int(lgr))%"
         }
         return cell
         
@@ -204,6 +209,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedItems.append(indexPath.row)
+        print("ligne selectionnée : (indexPath.row)")
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

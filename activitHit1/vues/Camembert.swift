@@ -11,8 +11,8 @@ import UIKit
 class Camembert: UIView {
 
     var valeurs : [GrafObject]?
-    
-    var largeurTrait:CGFloat = 25
+    var selectedObjects :[Int] = []
+    var largeurTrait:CGFloat = 1
     
  
     /*
@@ -44,12 +44,19 @@ class Camembert: UIView {
         if let vals = self.valeurs {
             //0..<vals.count
             var depart:CGFloat = 0.0
-            
-            for portion in vals {
+            //for portion in vals
+            for item in 0..<vals.count {
+                let portion = vals[item]
                 let valAngle = CGFloat(portion.val)
                 let couleur = portion.couleur
                 //let couleur = UIColor.blue
                 let arriveen = valAngle + depart
+                // On prépare l'épaisseur
+                if selectedObjects.contains(item){
+                    largeurTrait = LINE_FAT
+                } else {
+                    largeurTrait = LINE_THIN
+                }
                 tracerPortionTarte(depart: depart, arrivee: arriveen, couleur: couleur)
                 depart = arriveen
             }
@@ -84,7 +91,7 @@ class Camembert: UIView {
         couleur.setFill()
         //UIColor.white.setFill()
         path.lineWidth = largeurTrait
-        //path.stroke()
+        path.stroke()
         path.fill()
         
         //print("trace  :de depart \(depart * centieme) à angle = \(arrivee * centieme), rayon : \(radius), couleur : \(couleur)")

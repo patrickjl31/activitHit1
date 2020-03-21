@@ -221,6 +221,13 @@ struct Activitee: Codable {
     }
 }
 
+//--------------------------
+//--elements pour tracer les résultats en graphe ligne
+
+extension Activitee {
+    
+}
+
 
 
 
