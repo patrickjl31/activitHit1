@@ -24,6 +24,7 @@
 		2A83AF8323E82B8300B37696 /* Alerte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A83AF8223E82B8300B37696 /* Alerte.swift */; };
 		2A83AF8523E82C2400B37696 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A83AF8423E82C2400B37696 /* CustomButton.swift */; };
 		2A83AF8723E83B0B00B37696 /* RoundedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A83AF8623E83B0B00B37696 /* RoundedImage.swift */; };
+		2A86DA9D242E4EBB00FBD078 /* RecurrenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A86DA9C242E4EBB00FBD078 /* RecurrenceViewController.swift */; };
 		2A97718923E88222007D4085 /* AccueilController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A97718823E88222007D4085 /* AccueilController.swift */; };
 		2A97718B23E8DA88007D4085 /* CreerFileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A97718A23E8DA88007D4085 /* CreerFileController.swift */; };
 		2A97718D23E8DACD007D4085 /* AddHitsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A97718C23E8DACD007D4085 /* AddHitsController.swift */; };
@@ -52,6 +53,7 @@
 		2A83AF8223E82B8300B37696 /* Alerte.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerte.swift; sourceTree = "<group>"; };
 		2A83AF8423E82C2400B37696 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		2A83AF8623E83B0B00B37696 /* RoundedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedImage.swift; sourceTree = "<group>"; };
+		2A86DA9C242E4EBB00FBD078 /* RecurrenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecurrenceViewController.swift; sourceTree = "<group>"; };
 		2A97718823E88222007D4085 /* AccueilController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccueilController.swift; sourceTree = "<group>"; };
 		2A97718A23E8DA88007D4085 /* CreerFileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreerFileController.swift; sourceTree = "<group>"; };
 		2A97718C23E8DACD007D4085 /* AddHitsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddHitsController.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 			children = (
 				2A97718823E88222007D4085 /* AccueilController.swift */,
 				2A97718C23E8DACD007D4085 /* AddHitsController.swift */,
+				2A86DA9C242E4EBB00FBD078 /* RecurrenceViewController.swift */,
 				2A97718A23E8DA88007D4085 /* CreerFileController.swift */,
 				2A97718E23E9F269007D4085 /* HelpController.swift */,
 				2A6AB47523FFCF1300653CF1 /* BilanViewController.swift */,
@@ -223,6 +226,7 @@
 				2A83AF6423E8288200B37696 /* AppDelegate.swift in Sources */,
 				2A83AF8323E82B8300B37696 /* Alerte.swift in Sources */,
 				2A83AF8123E82A1D00B37696 /* Filer.swift in Sources */,
+				2A86DA9D242E4EBB00FBD078 /* RecurrenceViewController.swift in Sources */,
 				2A6AB4782401340B00653CF1 /* Camembert.swift in Sources */,
 				2A6AB47C2406A79600653CF1 /* BilanCell.swift in Sources */,
 				2A6AB47623FFCF1300653CF1 /* BilanViewController.swift in Sources */,

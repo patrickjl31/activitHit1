@@ -8,12 +8,20 @@
 
 import UIKit
 
+struct VirtualPortion {
+    var depart : CGFloat
+    var arrivee : CGFloat
+    var couleur :UIColor
+}
+
 class Camembert: UIView {
 
     var valeurs : [GrafObject]?
     var selectedObjects :[Int] = []
     var largeurTrait:CGFloat = 1
     
+    var vpSimple: [VirtualPortion] = []
+    var vpLarge: [VirtualPortion] = []
  
     /*
     init(frame: CGRect, valeursPortions:[String:Double], avecCouleurs : [String:UIColor]) {
@@ -38,9 +46,10 @@ class Camembert: UIView {
     */
     override func draw(_ rect: CGRect) {
         // Drawing code
-       
+        vpLarge = []
+        vpSimple = []
         //var compteur = 0
-        print("avant entrée boucle, valeurs : \(valeurs)")
+        //print("avant entrée boucle, valeurs : \(String(describing: valeurs))")
         if let vals = self.valeurs {
             //0..<vals.count
             var depart:CGFloat = 0.0
@@ -51,37 +60,50 @@ class Camembert: UIView {
                 let couleur = portion.couleur
                 //let couleur = UIColor.blue
                 let arriveen = valAngle + depart
-                // On prépare l'épaisseur
+                let newVP = VirtualPortion(depart: depart, arrivee: arriveen, couleur: couleur)
                 if selectedObjects.contains(item){
-                    largeurTrait = LINE_FAT
+                    vpLarge.append(newVP)
                 } else {
-                    largeurTrait = LINE_THIN
+                    vpSimple.append(newVP)
                 }
-                tracerPortionTarte(depart: depart, arrivee: arriveen, couleur: couleur)
+                // On prépare l'épaisseur
+//                if selectedObjects.contains(item){
+//                    largeurTrait = LINE_FAT
+//                } else {
+//                    largeurTrait = LINE_THIN
+//                }
+//                tracerPortionTarte(depart: depart, arrivee: arriveen, couleur: couleur)
                 depart = arriveen
             }
-            /*
-            let valAngle = CGFloat(75)
-            let couleur = vals[1].couleur
-            //let couleur = UIColor.blue
-            let arriveen = valAngle + depart
-            tracerPortionTarte(depart: depart, arrivee: arriveen, couleur: couleur)
-             */
+            largeurTrait = LINE_THIN
+            for portion in vpSimple {
+                tracerPortionTarte(depart: portion.depart, arrivee: portion.arrivee, couleur: portion.couleur)
+            }
+            largeurTrait = LINE_FAT
+            for portion in vpLarge {
+                tracerPortionTarte(depart: portion.depart, arrivee: portion.arrivee, couleur: portion.couleur)
+            }
+            
         }
     }
     
     func tracerPortionTarte(depart:CGFloat, arrivee : CGFloat, couleur : UIColor) {
         let path = UIBezierPath()
         
-        let centieme:CGFloat = 2 * .pi / 100
+        //let centieme:CGFloat = 2 * .pi / 100
+        //-- On trace l'intérieur de la portion
         let radius = (min(bounds.width, bounds.height) / 2) - (largeurTrait / 2)
         let centre = CGPoint(x: bounds.width / 2, y: bounds.height / 2)
         //let path = UIBezierPath(arcCenter: centre, radius: radius, startAngle: depart * centieme, endAngle: arrivee * centieme, clockwise: true)
         let departRadian = enRadian(centieme: Double(depart))
         let arriveeRadian = enRadian(centieme: Double(arrivee))
         
+        let pointDepart = pointSurCercle(position: Float(departRadian), rayon: Float(radius), centre: centre)
+        //let pointArrivee =  pointSurCercle(position: Float(arriveeRadian), rayon: Float(radius), centre: centre)
+        
         path.move(to: centre)
-        path.addLine(to: pointSurCercle(position: Float(departRadian), rayon: Float(radius), centre: centre))
+        //path.addLine(to: pointSurCercle(position: Float(departRadian), rayon: Float(radius), centre: centre))
+        path.addLine(to: pointDepart)
         path.addArc(withCenter: centre, radius: radius, startAngle: departRadian, endAngle: arriveeRadian, clockwise: true)
         path.addLine(to: pointSurCercle(position: Float(arriveeRadian), rayon: Float(radius), centre: centre))
         
@@ -91,9 +113,21 @@ class Camembert: UIView {
         couleur.setFill()
         //UIColor.white.setFill()
         path.lineWidth = largeurTrait
-        path.stroke()
+        //path.stroke()
         path.fill()
         
+        // Un bord en couronne
+        let radiusInterieur = LINE_FAT * 2
+        let path2 = UIBezierPath()
+        let  departInterieur = pointSurCercle(position: Float(departRadian), rayon: Float(radiusInterieur), centre: centre)
+        let arriveeInterieure = pointSurCercle(position: Float(arriveeRadian), rayon: Float(radiusInterieur), centre: centre)
+        path2.move(to: departInterieur)
+        path2.addLine(to: pointDepart)
+        path2.addArc(withCenter: centre, radius: radius, startAngle: departRadian, endAngle: arriveeRadian, clockwise: true)
+        path2.addLine(to: arriveeInterieure)
+        path2.addArc(withCenter: centre, radius: radiusInterieur, startAngle: arriveeRadian, endAngle: departRadian, clockwise: false)
+        path2.lineWidth = largeurTrait
+        path2.stroke()
         //print("trace  :de depart \(depart * centieme) à angle = \(arrivee * centieme), rayon : \(radius), couleur : \(couleur)")
     }
     

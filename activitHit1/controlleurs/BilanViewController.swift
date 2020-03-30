@@ -8,12 +8,16 @@
 
 import UIKit
 
-class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, Recurrence {
+    
+    
+    
  
 
     @IBOutlet weak var titreLbl: UILabel!
     @IBOutlet weak var dateDebutField: UITextField!
     @IBOutlet weak var dateFinField: UITextField!
+    @IBOutlet weak var choixLbl: UILabel!
     
     @IBOutlet weak var applePie: Camembert!
     
@@ -24,6 +28,9 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     var dateDeb:Date?
     var dateFin:Date = Date()
     private var dateFormatter = DateFormatter()
+    // La liste des données récurrentes, les jeudi ou les 12-13h
+    // Clefs : Days, Hours
+    var listeRecurrences = [String:[Int]]()
     
     var activitee:Activitee?
     var enCouleur:[GrafObject]?
@@ -116,6 +123,27 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         //view.endEditing(true)
     }
     
+    // MARK: - Protocole
+   func recurrencesChoisies(choix: [String : [Int]]) {
+    listeRecurrences = choix
+       print(choix)
+    var comment = ""
+    if let jours = choix["Days"], jours.count > 0 {
+        comment += "Jours : "
+        for jour in jours {
+            comment += "\(days[jour - 1]) "
+        }
+    }
+    if let heures = choix["Hours"], heures.count > 0 {
+        comment += " ; Heures : "
+        for heure in heures {
+            comment += "\(hours[heure]) "
+        }
+    }
+    choixLbl.text = comment
+   }
+    
+    
     //--------------------------
     // Traitement des données et préparation de l'affichage graphique
     //let valeursGlobales = activitee.grafGlobal()
@@ -148,6 +176,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     }
     
     // On dessine les éléments sélectonnés dans activiteeLimitee
+    /// On dessine les éléments sélectonnés dans activiteeLimitee
     func miseAJourDonneesGraphiques()  {
         // On recupere  les objets graphiques d'activiteeLimitee
         print(selectedItems)
@@ -171,6 +200,8 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
 //        }
     }
     
+    /// met à jour les paramètres globaux du modèle et ordonne le redessin du camembert
+    
     func dessineCamembert()  {
         if let enCouleurs = enCouleur{
             applePie.valeurs = enCouleurs
@@ -180,7 +211,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         }
     }
     
-    //--------------------------
+    // MARK: Tableview --------------------------
     //--- Tableview---
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let combien = enCouleur?.count {
@@ -197,6 +228,11 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
             //cell.couleurLegende.backgroundColor = source.couleur
             cell.vue.backgroundColor = source.couleur
             cell.vue.frame = CGRect(x: 0, y: 1, width: lgr, height: 18)
+            if cell.isSelected {
+                cell.accessoryType = UITableViewCell.AccessoryType.checkmark
+            } else {
+              cell.accessoryType = UITableViewCell.AccessoryType.none
+            }
             
             let pourcent = Int(source.val)
             cell.texteLegende.text = "\(source.ident)  = \(source.nbHits) Hits : \(Int(pourcent))%"
@@ -210,9 +246,11 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.cellForRow(at: indexPath as IndexPath)?.accessoryType = .checkmark
         if !selectedItems.contains(indexPath.row){
+            
             selectedItems.append(indexPath.row)
-            //print("ligne selectionnée : (indexPath.row)")
+            print("ligne selectionnée : (indexPath.row)")
             miseAJourDonneesGraphiques()
         }
         
@@ -229,6 +267,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         if posCible > -1 {
             selectedItems.remove(at: posCible)
         }
+        tableView.cellForRow(at: indexPath as IndexPath)?.accessoryType = .none
         miseAJourDonneesGraphiques()
     }
     
@@ -237,12 +276,17 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     /*
     // MARK: - Navigation
 
+     */
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if segue.identifier == VERS_RECURRENCE {
+            let vc = segue.destination as! RecurrenceViewController
+            vc.delegate = self
+        }
     }
-    */
+  
     
     //-----------------
     //--textfield delegate

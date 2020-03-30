@@ -88,7 +88,7 @@ class CreerFileController: UIViewController, UITableViewDelegate, UITableViewDat
                 let nameFile = arrayName[0]
                 //print("on va changer \(nameFile)")
                 //let monActivitee = activitee
-                var tampon:Activitee = Activitee(nom: "Tampon", categories: [])
+                let tampon:Activitee = Activitee(nom: "Tampon", categories: [])
                 if let nouvelleActivitee = tampon.loadFromFile(name: String(nameFile))
                     {
                     //print("changement de fichier ...")

@@ -97,8 +97,8 @@ class AccueilController: UIViewController, AddHitsProtocol, CreerHitsProtocol {
         if let unHit = activitee.firstHit() {
             performSegue(withIdentifier: VERS_BILAN, sender: nil)
             //let valeurs = activitee.grafGlobalPerCent()
-            let valeursGlobales = activitee.grafGlobal()
-            let valeurs = activitee.grafGlobalPerCent(globalRes: valeursGlobales)
+            //let valeursGlobales = activitee.grafGlobal()
+            //let valeurs = activitee.grafGlobalPerCent(globalRes: valeursGlobales)
             
         } else {
             let alert = Alerte()

@@ -55,19 +55,25 @@ struct Activitee: Codable {
     //--- Manipulation des activités
     
     func merge(me:Activitee, toActivitee: Activitee) -> Activitee {
-        var res = me
+        var res = Activitee(nom: me.nom, categories: [])
         for categorie in me.categories {
+            var newCategorie = Categorie(nom: categorie.nom, hits: categorie.hits)
             for toCat in toActivitee.categories {
-                var newCategorie = Categorie(nom: toCat.nom, hits: toCat.hits)
                 if categorie.nom == toCat.nom {
                     newCategorie = categorie.merge(me: categorie, withCategories: toCat)
                 }
-                
             }
-            
+            res.categories.append(newCategorie)
         }
-        return me
+        for categorie in toActivitee.categories{
+            if res.categories.filter {$0.nom == categorie.nom}.count == 0 {
+                res.categories.append(categorie)
+            }
+        }
+        return res
     }
+    
+    
     func miseABlanc() -> Activitee {
         var res = Activitee(nom: self.nom, categories: [])
         for i in 0..<self.categories.count{
@@ -222,7 +228,19 @@ struct Activitee: Codable {
 }
 
 //--------------------------
-//--elements pour tracer les résultats en graphe ligne
+//--elements pour tracer le filtrage des dates
+
+extension Date {
+    // Dimanche = 1, Pas de 0
+    var dayOfWeek : Int{
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.component(.weekday, from: self)
+    }
+    var hourOfDay : Int{
+        let calendar = Calendar(identifier: .gregorian)
+        return calendar.component(.hour, from: self)
+    }
+}
 
 extension Activitee {
     
