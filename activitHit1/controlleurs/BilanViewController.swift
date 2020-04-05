@@ -28,9 +28,11 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     var dateDeb:Date?
     var dateFin:Date = Date()
     private var dateFormatter = DateFormatter()
+    
     // La liste des données récurrentes, les jeudi ou les 12-13h
     // Clefs : Days, Hours
     var listeRecurrences = [String:[Int]]()
+    var existRecurrences = false
     
     var activitee:Activitee?
     var enCouleur:[GrafObject]?
@@ -126,6 +128,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     // MARK: - Protocole
    func recurrencesChoisies(choix: [String : [Int]]) {
     listeRecurrences = choix
+    existRecurrences = false
        print(choix)
     var comment = ""
     if let jours = choix["Days"], jours.count > 0 {
@@ -133,12 +136,14 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         for jour in jours {
             comment += "\(days[jour - 1]) "
         }
+        existRecurrences = true
     }
     if let heures = choix["Hours"], heures.count > 0 {
         comment += " ; Heures : "
         for heure in heures {
             comment += "\(hours[heure]) "
         }
+        existRecurrences = true
     }
     choixLbl.text = comment
    }
@@ -184,9 +189,16 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
             let listeReduite: Activitee = Activitee(nom: act.nom, categories: [])
             
         }
+        // On filtre les récurrences s'il y en a
+        var activiteeReduite = activiteeLimitee
+        if existRecurrences {
+            activiteeReduite = activiteeLimitee.filter(activitee: activiteeLimitee, avecFiltre: listeRecurrences)
+        }
+        
         // On recupere  les objets graphiques d'activiteeLimitee
-        let valeursG = activiteeLimitee.grafGlobal()
-        let valeurPerCent = activiteeLimitee.grafGlobalPerCent(globalRes: valeursG)
+        //let valeursG = activiteeLimitee.grafGlobal()
+        let valeursG = activiteeReduite.grafGlobal()
+        let valeurPerCent = activiteeReduite.grafGlobalPerCent(globalRes: valeursG)
         enCouleur = addColorsForCategories(categories: valeurPerCent)
         applePie.valeurs = enCouleur
         applePie.selectedObjects = selectedItems
@@ -200,7 +212,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
 //        }
     }
     
-    /// met à jour les paramètres globaux du modèle et ordonne le redessin du camembert
+/// met à jour les paramètres globaux du modèle et ordonne le redessin du camembert
     
     func dessineCamembert()  {
         if let enCouleurs = enCouleur{

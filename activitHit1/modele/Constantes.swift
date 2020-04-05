@@ -25,6 +25,10 @@ let BILAN_CELL = "bilanCell"
 // recurrence
 let HOURS_CELL = "HoursCell"
 let DAYS_CELL = "DaysCell"
+enum TypeRecurrence {
+    case Day
+    case Hour
+}
 //liens
 
 

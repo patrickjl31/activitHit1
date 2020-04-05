@@ -243,6 +243,21 @@ extension Date {
 }
 
 extension Activitee {
+    // Pour chaque catégorie, on garde
+    // Les Hits qui sont arrétés par les filtres
+    //si le jour est  filtré
+    //si l'heure est  filtrée
+    // On garde
+    func filter(activitee:Activitee, avecFiltre: [String:[Int]]) -> Activitee {
+        var res = Activitee(nom: activitee.nom, categories: [])
+        for categorie in activitee.categories {
+            let lesHits = categorie.filter(with: avecFiltre)
+            let newCat = Categorie(nom: categorie.nom, hits: lesHits)
+            res.categories.append(newCat)
+        }
+        return res
+    }
+    
     
 }
 

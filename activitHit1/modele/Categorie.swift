@@ -50,6 +50,16 @@ struct Categorie:Codable {
         return res
     }
     
+    func filter(with filtre:[String:[Int]]) -> [Hit] {
+        var res:[Hit] = []
+        for hit in self.hits {
+            if hit.filter(daysAndHours: filtre){
+                res.append(hit)
+            }
+        }
+        return res
+    }
+    
     
     
 }
