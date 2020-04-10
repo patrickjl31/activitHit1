@@ -68,7 +68,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
         // la table légende
         bilanTableView.delegate = self
         bilanTableView.dataSource = self
-        //bilanTableView.allowsMultipleSelection = true
+        bilanTableView.allowsMultipleSelection = true
         //bilanTableView.allowsMultipleSelectionDuringEditing = true
         
         
@@ -184,11 +184,11 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     /// On dessine les éléments sélectonnés dans activiteeLimitee
     func miseAJourDonneesGraphiques()  {
         // On recupere  les objets graphiques d'activiteeLimitee
-        print(selectedItems)
-        if let act = activitee, selectedItems.count > 1 {
-            let listeReduite: Activitee = Activitee(nom: act.nom, categories: [])
-            
-        }
+//        print(selectedItems)
+//        if let act = activitee, selectedItems.count > 1 {
+//            let listeReduite: Activitee = Activitee(nom: act.nom, categories: [])
+//            
+//        }
         // On filtre les récurrences s'il y en a
         var activiteeReduite = activiteeLimitee
         if existRecurrences {
@@ -235,9 +235,11 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
      
      func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BILAN_CELL, for: indexPath) as! BilanCell
+        //let cell = tableView.dequeueReusableCell(withIdentifier: BILAN_CELL, for: indexPath)
         if let source = enCouleur?[indexPath.row]{
             let lgr = CGFloat(source.valLongueurBarre)
             //cell.couleurLegende.backgroundColor = source.couleur
+            //cell.backgroundColor = source.couleur
             cell.vue.backgroundColor = source.couleur
             cell.vue.frame = CGRect(x: 0, y: 1, width: lgr, height: 18)
             if cell.isSelected {
@@ -247,6 +249,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
             }
             
             let pourcent = Int(source.val)
+            //cell.textLabel?.text = "\(source.ident)  = \(source.nbHits) Hits : \(Int(pourcent))%"
             cell.texteLegende.text = "\(source.ident)  = \(source.nbHits) Hits : \(Int(pourcent))%"
         }
         return cell
@@ -259,6 +262,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.cellForRow(at: indexPath as IndexPath)?.accessoryType = .checkmark
+        print("ligne selectionnée : (indexPath.row)")
         if !selectedItems.contains(indexPath.row){
             
             selectedItems.append(indexPath.row)
@@ -280,6 +284,7 @@ class BilanViewController: UIViewController, UITextFieldDelegate, UITableViewDel
             selectedItems.remove(at: posCible)
         }
         tableView.cellForRow(at: indexPath as IndexPath)?.accessoryType = .none
+        print("ligne déselectionnée : (indexPath.row)")
         miseAJourDonneesGraphiques()
     }
     
